@@ -6,17 +6,25 @@ import { graph, config } from '@grafbase/sdk'
 
 const g = graph.Standalone()
 
-// Data Sources - https://grafbase.com/docs/connectors
-//
-// const pg = connector.Postgres('pg', { url: g.env('DATABASE_URL') })
-// g.datasource(pg)
+const user = g.type('User', {
+  name: g.email().optional(),
+  email: g.email().optional(),
+  avatarUrl: g.url(),
+  description: g.email().optional(),
+  githubUrl: g.url().optional(),
+  linkedinUrl: g.url().optional(), 
+  projects: g.string().list().optional()
+})
 
-// Resolvers - https://grafbase.com/docs/resolvers
-//
-// g.query('helloWorld', {
-//   returns: g.string(),
-//   resolver: 'hello-world',
-// })
+const Project = g.type('Project', {
+  title: g.email().optional(),
+  description: g.string(), 
+  image: g.url(),
+  liveSiteUrl: g.url(), 
+  githubUrl: g.url(), 
+  category: g.email().optional(),
+  createdBy: g.string().optional(),
+})
 
 export default config({
   graph: g,

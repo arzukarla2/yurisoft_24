@@ -1,4 +1,4 @@
-import { graph, config } from '@grafbase/sdk'
+import { graph, config, auth } from '@grafbase/sdk'
 
 // Welcome to Grafbase!
 //
@@ -7,29 +7,45 @@ import { graph, config } from '@grafbase/sdk'
 const g = graph.Standalone()
 
 const user = g.type('User', {
-  name: g.email().optional(),
-  email: g.email().optional(),
+  name: g.string().optional(),
+  email: g.string().optional(),
   avatarUrl: g.url(),
-  description: g.email().optional(),
+  description: g.string().optional(),
   githubUrl: g.url().optional(),
   linkedinUrl: g.url().optional(), 
   projects: g.string().list().optional()
-})
+})//.auth((rules) => {
+  //rules.public().read()
+//})
 
 const Project = g.type('Project', {
-  title: g.email().optional(),
+  title: g.string().optional(),
   description: g.string(), 
   image: g.url(),
   liveSiteUrl: g.url(), 
   githubUrl: g.url(), 
-  category: g.email().optional(),
+  category: g.string().optional(),
   createdBy: g.string().optional(),
+})//.auth((rules) => {
+  //rules.public().read()
+  //  rules.private().create().delete().update()
+ // })
+const jwt=auth.JWT({
+  issuer:'grafbase',
+  secret: g.env('NEXTAUTH_SECRET')
 })
+//.auth((rules) => {
+//rules.public().read()
+ // rules.private().create().delete().update()
+//})
 
 export default config({
   graph: g,
   // Authentication - https://grafbase.com/docs/auth
   auth: {
+     //providers: [jwt],
+     // rules: (rules) => rules.private()
+   // },
     // OpenID Connect
     // const oidc = auth.OpenIDConnect({ issuer: g.env('OIDC_ISSUER_URL') })
     // providers: [oidc],
